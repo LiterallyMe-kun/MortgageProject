@@ -1,9 +1,9 @@
 function Advice() {
   return (
-    <section>
-      <h1>Best Practices Before Taking on a Loan</h1>
+    <section className="page-card advice-page">
+      <h1 className="page-title">Best Practices Before Taking on a Loan</h1>
 
-      <article>
+      <article className="advice-block">
         <h2>Before You Borrow</h2>
         <ul>
           <li>Compare multiple lenders instead of accepting the first offer.</li>
@@ -13,7 +13,7 @@ function Advice() {
         </ul>
       </article>
 
-      <article>
+      <article className="advice-block">
         <h2>Questions to Ask</h2>
         <ul>
           <li>Is the rate fixed or adjustable?</li>
@@ -23,9 +23,9 @@ function Advice() {
         </ul>
       </article>
 
-      <article>
+      <article className="advice-block">
         <h2>Helpful Resources</h2>
-        <ul>
+        <ul className="resource-list">
           <li>
             <a
               href="https://www.consumerfinance.gov/"

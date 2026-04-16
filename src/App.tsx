@@ -71,14 +71,16 @@ function App() {
 }, [state.mode]);
 
   return (
-    <BrowserRouter>
-      <header>
-        <nav>
-          <Link to="/">Calculator</Link> | <Link to="/advice">Advice</Link>
+  <BrowserRouter>
+    <div className="app-shell">
+      <header className="site-header">
+        <nav className="site-nav">
+          <Link className="nav-link" to="/">Calculator</Link>
+          <Link className="nav-link" to="/advice">Advice</Link>
         </nav>
       </header>
 
-      <main>
+      <main className="page-content">
         <Routes>
           <Route
             path="/"
@@ -87,8 +89,9 @@ function App() {
           <Route path="/advice" element={<Advice />} />
         </Routes>
       </main>
-    </BrowserRouter>
-  );
+    </div>
+  </BrowserRouter>
+);
 }
 
 export default App;

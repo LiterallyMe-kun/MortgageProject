@@ -3,19 +3,22 @@ import type { CalculatorProps } from "./Types";
 function Calculator({ state, dispatch }: CalculatorProps) {
   if (state.mode === "loading-rate") {
     return (
-      <section>
-        <h1>Mortgage Calculator</h1>
-        <p>Loading latest mortgage rate...</p>
+      <section className="page-card calculator-page">
+        <h1 className="page-title">Mortgage Calculator</h1>
+        <p className="status-message">Loading latest mortgage rate...</p>
       </section>
     );
   }
 
   if (state.mode === "rate-error") {
     return (
-      <section>
-        <h1>Mortgage Calculator</h1>
-        <p>Error loading mortgage rate: {state.message}</p>
-        <button onClick={() => dispatch({ type: "rateRequested" })}>
+      <section className="page-card calculator-page">
+        <h1 className="page-title">Mortgage Calculator</h1>
+        <p className="error-message">Error loading mortgage rate: {state.message}</p>
+        <button
+          className="primary-button"
+          onClick={() => dispatch({ type: "rateRequested" })}
+        >
           Retry Rate Fetch
         </button>
       </section>
@@ -25,24 +28,28 @@ function Calculator({ state, dispatch }: CalculatorProps) {
   const inputs = state.inputs;
 
   return (
-    <section>
-      <h1>Mortgage Calculator</h1>
+    <section className="page-card calculator-page">
+      <h1 className="page-title">Mortgage Calculator</h1>
 
-      <p>
+      <div className="rate-banner">
         Current mortgage rate: <strong>{inputs.rate}%</strong>
-      </p>
+      </div>
 
-      <button onClick={() => dispatch({ type: "rateRequested" })}>
+      <button
+        className="secondary-button"
+        onClick={() => dispatch({ type: "rateRequested" })}
+      >
         Refresh Mortgage Rate
       </button>
 
       <form
+        className="mortgage-form"
         onSubmit={(e) => {
           e.preventDefault();
           dispatch({ type: "calculate" });
         }}
       >
-        <div>
+        <div className="form-group">
           <label htmlFor="principal">Loan Principal</label>
           <input
             id="principal"
@@ -58,7 +65,7 @@ function Calculator({ state, dispatch }: CalculatorProps) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="years">Loan Term (Years)</label>
           <input
             id="years"
@@ -74,7 +81,7 @@ function Calculator({ state, dispatch }: CalculatorProps) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="rate">Annual Interest Rate (%)</label>
           <input
             id="rate"
@@ -91,11 +98,13 @@ function Calculator({ state, dispatch }: CalculatorProps) {
           />
         </div>
 
-        <button type="submit">Calculate</button>
+        <button className="primary-button" type="submit">
+          Calculate
+        </button>
       </form>
 
       {state.mode === "calculated" && (
-        <section>
+        <section className="results-card">
           <h2>Loan Summary</h2>
           <p>Monthly Payment: ${state.result.monthlyPayment.toFixed(2)}</p>
           <p>Total Paid: ${state.result.totalPaid.toFixed(2)}</p>

@@ -15,62 +15,60 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    let cancelled = false;
+  if (state.mode !== "loading-rate") return;
 
-    async function loadRate() {
-      dispatch({ type: "rateRequested" });
+  let cancelled = false;
 
-      try {
-        const response = await fetch(
-          `/.netlify/functions/GetRate`
-        );
+  async function loadRate() {
+    try {
+      const response = await fetch("/.netlify/functions/GetRate");
 
-        if (!response.ok) {
-          if (cancelled) return;
-          dispatch({
-            type: "rateFailed",
-            message: `HTTP ${response.status}: ${response.statusText}`
-          });
-          return;
-        }
-
-        const json = await response.json();
-
+      if (!response.ok) {
         if (cancelled) return;
-
-        const parsedRate = Number(json.rate);
-
-        if (Number.isNaN(parsedRate)) {
-          dispatch({
-            type: "rateFailed",
-            message: "Could not read mortgage rate from server response."
-          });
-          return;
-        }
-
-        dispatch({
-          type: "rateLoaded",
-          rate: parsedRate
-        });
-      } catch (error) {
-        if (cancelled) return;
-
         dispatch({
           type: "rateFailed",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Unknown network error"
+          message: `HTTP ${response.status}: ${response.statusText}`
         });
+        return;
       }
+
+      const json = await response.json();
+
+      if (cancelled) return;
+
+      const parsedRate = Number(json.rate);
+
+      if (Number.isNaN(parsedRate)) {
+        dispatch({
+          type: "rateFailed",
+          message: "Could not read mortgage rate from server response."
+        });
+        return;
+      }
+
+      dispatch({
+        type: "rateLoaded",
+        rate: parsedRate
+      });
+    } catch (error) {
+      if (cancelled) return;
+
+      dispatch({
+        type: "rateFailed",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unknown network error"
+      });
     }
+  }
 
-    loadRate();
+  loadRate();
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  return () => {
+    cancelled = true;
+  };
+}, [state.mode]);
 
   return (
     <BrowserRouter>

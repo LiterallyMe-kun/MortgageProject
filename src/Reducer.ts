@@ -105,8 +105,8 @@ export function reducer(
     }
 
     default: {
-      const _exhaustive: never = action;
-      return state;
-    }
+  const exhaustiveCheck: never = action;
+  throw new Error(`Unhandled action: ${JSON.stringify(exhaustiveCheck)}`);
+}
   }
 }

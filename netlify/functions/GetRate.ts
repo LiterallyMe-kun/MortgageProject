@@ -24,10 +24,22 @@ export async function handler() {
       };
     }
 
-    const data = await response.json();
-    const latestValue = data?.observations?.[0]?.value;
-    const parsedRate = Number(latestValue);
+    const data: unknown = await response.json();
 
+    if (
+      typeof data !== "object" ||
+      data === null ||
+      !("observations" in data)
+    ) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Unexpected FRED response shape" })
+      };
+    }
+
+    const observations = (data as { observations?: Array<{ value?: string }> }).observations;
+    const latestValue = observations?.[0]?.value;
+    const parsedRate = Number(latestValue);
     if (!latestValue || Number.isNaN(parsedRate)) {
       return {
         statusCode: 500,
